@@ -1,0 +1,31 @@
+service: karapaia-matome-api
+
+provider:
+  name: aws
+  region: ap-northeast-1
+  runtime: nodejs14.x
+  timeout: 30
+  memorySize: 128
+  apiGateway:
+    minimumCompressionSize: 1024,
+    shouldStartNameWithService: true
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '2'
+  lambdaHashingVersion: 20201221
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+functions:
+  hello:
+    handler: src/handler.hello
+    events:
+      - http:
+          method: GET
+          path: hello
+
+custom:
+  serverless-offline:
+    host: 0.0.0.0
+    httpPort: 9000

@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  karapaia_matome_db:
+    container_name: karapaia_matome_db
+    image: amazon/dynamodb-local
+    # 名前付きボリュームを使用する場合はルート権限で実行
+    user: root
+    ports:
+      - 8000:8000
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /data
+    volumes:
+      - karapaia_matome_db_data:/data
+
+  karapaia_matome_api:
+    container_name: karapaia_matome_api
+    build:
+      context: ./node
+      args:
+        - AWS_ACCESS_KEY=$AWS_ACCESS_KEY
+        - AWS_SECRET_KEY=$AWS_SECRET_KEY
+    tty: true
+    ports:
+      - 9000:9000
+    volumes:
+      - ./app:/app
+
+volumes:
+  karapaia_matome_db_data:
