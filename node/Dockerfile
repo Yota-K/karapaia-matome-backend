@@ -3,11 +3,11 @@ FROM node:15-alpine
 ARG AWS_ACCESS_KEY
 ARG AWS_SECRET_KEY
 
-RUN apk update
-
-RUN apk add nodejs
-
-RUN npm install -g serverless
+RUN apk --no-cache update \
+  && apk add --update python \
+  && apk add make gcc g++ \
+  && apk add nodejs \
+  && npm install -g serverless
 
 # AWSの認証情報を~/.aws/credentialsに書き込む
 # Serverless Frameworkは~/.aws/credentialsの認証情報を利用する
