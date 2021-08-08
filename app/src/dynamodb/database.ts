@@ -1,10 +1,7 @@
-import { config, DynamoDB } from 'aws-sdk';
+import { DynamoDB } from 'aws-sdk';
+import { awsConfigUpdate } from '../config'
 
-// 警告を回避するためにconfig.updateでregionを指定
-// https://www.fixes.pub/program/578906.html
-config.update({
-  region: 'ap-north-east-1'
-});
+awsConfigUpdate();
 
 const devOptions = {
   credentials: {
@@ -18,7 +15,7 @@ const devOptions = {
 // JSでDynamoDBを操作するために必要な関数
 // DocumentClientを使用するとJSのデータ型を自動的にDynamoDB上の型に変換してくれるので、
 // コードが簡潔になる
-export const client = new DynamoDB.DocumentClient(process.env.IS_LOCAL ? devOptions : undefined);
+export const client = new DynamoDB.DocumentClient(devOptions);
 
 export const dbFunc = () => {
   const createTable = async (params: DynamoDB.CreateTableInput) => {
