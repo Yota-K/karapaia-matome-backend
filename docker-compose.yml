@@ -8,9 +8,12 @@ services:
     user: root
     ports:
       - 8000:8000
+    # データが消えないようにするために必要
     command: -jar DynamoDBLocal.jar -sharedDb -dbPath /data
     volumes:
       - karapaia_matome_db_data:/data
+    networks:
+      - karapaia_matome_backend_net
 
   karapaia_matome_api:
     container_name: karapaia_matome_api
@@ -24,6 +27,12 @@ services:
       - 9000:9000
     volumes:
       - ./app:/app
+    networks:
+      - karapaia_matome_backend_net
 
 volumes:
   karapaia_matome_db_data:
+
+networks:
+  karapaia_matome_backend_net:
+    driver: bridge
