@@ -18,22 +18,22 @@ const devOptions = {
 export const client = new DynamoDB.DocumentClient(devOptions);
 
 export const dbFunc = () => {
-  const createTable = async (params: DynamoDB.CreateTableInput) => {
-    console.log('テーブルの作成を行います。');
+  const createTable = async (tableName: string, params: DynamoDB.CreateTableInput) => {
+    console.log(`${tableName}: テーブルの作成を行います。`);
 
     await new DynamoDB(devOptions).createTable(params).promise();
 
-    console.log('テーブルの作成に成功しました。');
+    console.log(`${tableName}: テーブルの作成に成功しました。`);
   };
 
   const deleteTable = async (tableName: string) => {
-    console.log('テーブルの削除を行います。');
+    console.log(`${tableName}: テーブルの削除を行います。`);
 
     await new DynamoDB(devOptions).deleteTable({
       TableName: tableName,
     }).promise();
 
-    console.log('テーブルの削除に成功しました。');
+    console.log(`${tableName}: テーブルの削除に成功しました。`);
   };
 
   return {

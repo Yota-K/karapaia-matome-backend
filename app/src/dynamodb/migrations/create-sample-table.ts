@@ -2,27 +2,31 @@ import { dbFunc } from '../database';
 
 const { createTable } = dbFunc();
 
-createTable({
+createTable('sample_table', {
   TableName: 'sample_table',
   BillingMode: 'PAY_PER_REQUEST',
   AttributeDefinitions: [
     {
       // number
-      AttributeName: 'user_id', AttributeType: 'N'
+      AttributeName: 'user_id',
+      AttributeType: 'N',
     },
     {
       // string
-      AttributeName: 'created_at', AttributeType: 'S'
+      AttributeName: 'created_at',
+      AttributeType: 'S',
     },
   ],
   KeySchema: [
     {
       // Partition key
-      AttributeName: 'user_id', KeyType: 'HASH'
+      AttributeName: 'user_id',
+      KeyType: 'HASH'
     },
     {
      // Sort key
-      AttributeName: 'created_at', KeyType: 'RANGE'
+      AttributeName: 'created_at',
+      KeyType: 'RANGE',
     },
   ],
 }).catch(er => console.error(JSON.stringify(er, null, 2)));
