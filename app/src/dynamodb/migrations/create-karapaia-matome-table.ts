@@ -1,9 +1,11 @@
 import { dbFunc } from '../database';
+import { appConfig } from '../../config';
 
 const { createTable } = dbFunc();
+const { tableName } = appConfig;
 
-createTable('karapaia_matome', {
-  TableName: 'karapaia_matome',
+createTable(tableName, {
+  TableName: tableName,
   BillingMode: 'PAY_PER_REQUEST',
   AttributeDefinitions: [
     {

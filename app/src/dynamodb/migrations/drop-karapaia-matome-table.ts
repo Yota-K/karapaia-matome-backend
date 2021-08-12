@@ -1,4 +1,7 @@
 import { dbFunc } from '../database';
+import { appConfig } from '../../config';
 
 const { deleteTable } = dbFunc();
-deleteTable('karapaia_matome').catch(er => console.error(JSON.stringify(er, null, 2)));
+const { tableName } = appConfig;
+
+deleteTable(tableName).catch(er => console.error(JSON.stringify(er, null, 2)));
