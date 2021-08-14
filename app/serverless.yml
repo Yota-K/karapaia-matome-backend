@@ -19,11 +19,11 @@ plugins:
 
 functions:
   hello:
-    handler: src/handler.hello
+    handler: src/handler.getKarapaiaPosts
     events:
       - http:
           method: GET
-          path: hello
+          path: posts
 
 custom:
   serverless-offline:

@@ -3,8 +3,15 @@ import { client } from './dynamodb/database';
 import { appConfig } from './config';
 import { Post } from './types';
 
-const savePosts = async () => {
-  const { tableName } = appConfig;
+const { tableName } = appConfig;
+
+// スクレイピング結果をDBから取得する
+export const getPosts = async () => {
+  return await client.scan({ TableName: tableName }).promise();
+};
+
+// DBにデータの登録を行う
+export const savePosts = async () => {
   const results = (await mainFunc()) as Post[][];
 
   console.log(JSON.stringify(results, null, 2));
@@ -29,4 +36,4 @@ const savePosts = async () => {
   }
 };
 
-savePosts().catch((er) => console.error(er));
+// savePosts().catch((er) => console.error(er));
