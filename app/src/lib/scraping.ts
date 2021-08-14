@@ -9,19 +9,21 @@ export const mainFunc = async () => {
   const { url, pageNum } = appConfig;
   const urls = [...Array(pageNum)].map((_, i) => `${url}?p=${++i}`);
 
-  const results = await Promise.all(urls.map(async (url) => {
-    const res = await fetch(url);
-    const buffer = await res.buffer();
-    const encoding = await encodingFunc(buffer);
+  const results = await Promise.all(
+    urls.map(async (url) => {
+      const res = await fetch(url);
+      const buffer = await res.buffer();
+      const encoding = await encodingFunc(buffer);
 
-    const html = iconv.decode(buffer, encoding);
+      const html = iconv.decode(buffer, encoding);
 
-    const dom = new JSDOM(html);
-    const document = dom.window.document;
-    const nodes = document.querySelectorAll('.widget-header');
+      const dom = new JSDOM(html);
+      const document = dom.window.document;
+      const nodes = document.querySelectorAll('.widget-header');
 
-    return scrapingFunc(nodes);
-  }));
+      return scrapingFunc(nodes);
+    })
+  );
 
   if (!results) return;
 
@@ -36,11 +38,11 @@ const encodingFunc = async (buffer: Buffer) => {
   if (!encoding) throw new Error();
 
   return encoding;
-}
+};
 
 // スクレイピングの実行
 const scrapingFunc = (nodes: NodeListOf<Element>) => {
-  const results = Array.from(nodes).map((el, i)=> {
+  const results = Array.from(nodes).map((el, i) => {
     const titleHeading = el.querySelector('h2 > a');
     const date = el.querySelector('.clear > .date');
     const comment = el.querySelector('.clear > a:nth-of-type(1)');
@@ -65,7 +67,7 @@ const scrapingFunc = (nodes: NodeListOf<Element>) => {
         {
           catName: getInnerText(archiveSecond),
           catUrl: getHref(archiveSecond),
-        }
+        },
       ],
     };
 
@@ -83,9 +85,9 @@ const replacementDateStr = (date: string) => {
 // コメントのテキストからコメント数だけ抜き出す
 const pickCommentCount = (comment: string) => {
   const find = comment.match(/[0-9]+/);
-  
+
   if (!find) return;
-  
+
   const commentCount = find[0];
 
   return commentCount;

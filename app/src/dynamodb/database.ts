@@ -1,5 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
-import { awsConfigUpdate } from '../config'
+import { awsConfigUpdate } from '../config';
 
 awsConfigUpdate();
 
@@ -29,9 +29,11 @@ export const dbFunc = () => {
   const deleteTable = async (tableName: string) => {
     console.log(`${tableName}: テーブルの削除を行います。`);
 
-    await new DynamoDB(devOptions).deleteTable({
-      TableName: tableName,
-    }).promise();
+    await new DynamoDB(devOptions)
+      .deleteTable({
+        TableName: tableName,
+      })
+      .promise();
 
     console.log(`${tableName}: テーブルの削除に成功しました。`);
   };
@@ -39,5 +41,5 @@ export const dbFunc = () => {
   return {
     createTable,
     deleteTable,
-  }
+  };
 };

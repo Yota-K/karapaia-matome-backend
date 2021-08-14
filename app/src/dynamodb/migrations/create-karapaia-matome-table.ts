@@ -23,12 +23,12 @@ createTable(tableName, {
     {
       // Partition key
       AttributeName: 'postId',
-      KeyType: 'HASH'
+      KeyType: 'HASH',
     },
     {
-     // Sort key
+      // Sort key
       AttributeName: 'createdAt',
       KeyType: 'RANGE',
     },
   ],
-}).catch(er => console.error(JSON.stringify(er, null, 2)));
+}).catch((er) => console.error(JSON.stringify(er, null, 2)));
