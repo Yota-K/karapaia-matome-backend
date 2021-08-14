@@ -9,7 +9,7 @@ export const mainFunc = async () => {
   const { url, pageNum } = appConfig;
   const urls = [...Array(pageNum)].map((_, i) => `${url}?p=${++i}`);
 
-  const data = await Promise.all(urls.map(async (url) => {
+  const results = await Promise.all(urls.map(async (url) => {
     const res = await fetch(url);
     const buffer = await res.buffer();
     const encoding = await encodingFunc(buffer);
@@ -23,12 +23,7 @@ export const mainFunc = async () => {
     return scrapingFunc(nodes);
   }));
 
-  if (!data) return;
-
-  // 多次元配列になってしまっているので、一次元配列に変換する
-  const results = data.reduce((prev, next) => {
-    return [...prev, ...next];
-  }, []);
+  if (!results) return;
 
   return results;
 };

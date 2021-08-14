@@ -5,19 +5,25 @@ import { Post } from './types';
 
 const savePosts = async () => {
   const { tableName } = appConfig;
-  const results = await mainFunc() as Post[];
+  const results = await mainFunc() as Post[][];
 
   console.log(JSON.stringify(results, null, 2));
 
-  await client.batchWrite({
-    RequestItems: {
-      [tableName]: results.map(Item => ({
-        PutRequest: {
-          Item,
-        },
-      }))
-    }
-  }).promise().then(() => console.log('success!'));
+  let count = 0;
+
+  while (count < results.length) {
+    await client.batchWrite({
+      RequestItems: {
+        [tableName]: results[count].map(Item => ({
+          PutRequest: {
+            Item,
+          },
+        }))
+      }
+    }).promise().then(() => console.log('success!'));
+
+    count++;
+  };
 };
 
 savePosts().catch(er => console.error(er));
