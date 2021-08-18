@@ -8,7 +8,7 @@ export const getKarapaiaPosts: Handler = async (event: APIGatewayEvent, context:
   try {
     const posts = await getPosts();
 
-    cb(null, generateResponseHeader(200, JSON.stringify(posts.Items)));
+    cb(null, generateResponseHeader(200, JSON.stringify(posts)));
   } catch (er) {
     cb(null, generateResponseHeader(500, JSON.stringify(er)));
   }

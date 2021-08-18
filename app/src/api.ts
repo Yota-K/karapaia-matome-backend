@@ -7,7 +7,13 @@ const { tableName } = appConfig;
 
 // スクレイピング結果をDBから取得する
 export const getPosts = async () => {
-  return await client.scan({ TableName: tableName }).promise();
+  const posts = await client.scan({ TableName: tableName }).promise();
+
+  if (!posts) return;
+
+  return posts.Items?.sort((a, b) => {
+    return a.createdAt < b.createdAt ? 1 : -1;
+  });
 };
 
 // DBにデータの登録を行う
