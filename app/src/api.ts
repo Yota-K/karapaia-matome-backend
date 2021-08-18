@@ -16,11 +16,31 @@ export const getPosts = async () => {
   });
 };
 
+// DBのデータを初期化する
+export const deletePosts = async () => {
+  const posts = await client.scan({ TableName: tableName }).promise();
+  const items = posts?.Items;
+
+  if (items) {
+    for (const post of items) {
+      await client
+        .delete({
+          TableName: tableName,
+          Key: {
+            postId: post['postId'],
+            createdAt: post['createdAt'],
+          },
+        })
+        .promise();
+    }
+  }
+};
+
 // DBにデータの登録を行う
 export const savePosts = async () => {
   const results = (await mainFunc()) as Post[][];
 
-  console.log(JSON.stringify(results, null, 2));
+  await deletePosts();
 
   let count = 0;
 
