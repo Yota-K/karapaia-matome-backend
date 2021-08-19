@@ -5,8 +5,12 @@
   "main": "serverless.ts",
   "scripts": {
     "local:invoke": "sls offline start",
+    "local:savePosts": "npx ts-node src/sample/save-posts.ts",
+    "local:deletePosts": "npx ts-node src/sample/delete-posts.ts",
     "lint": "eslint --fix **/*.{js,ts}",
-    "format": "prettier --write **/*.{js,ts}"
+    "format": "prettier --write **/*.{js,ts}",
+    "migrate:up": "npx ts-node src/dynamodb/migrations/create-karapaia-matome-table.ts",
+    "migrate:down": "npx ts-node src/dynamodb/migrations/drop-karapaia-matome-table.ts"
   },
   "engines": {
     "node": ">=14.15.0"
