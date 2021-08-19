@@ -42,7 +42,7 @@ const encodingFunc = async (buffer: Buffer) => {
 
 // スクレイピングの実行
 const scrapingFunc = (nodes: NodeListOf<Element>) => {
-  const results = Array.from(nodes).map((el, i) => {
+  const results = Array.from(nodes).map((el) => {
     const titleHeading = el.querySelector('h2 > a');
     const date = el.querySelector('.clear > .date');
     const comment = el.querySelector('.clear > a:nth-of-type(1)');
@@ -54,7 +54,6 @@ const scrapingFunc = (nodes: NodeListOf<Element>) => {
     const commentCount = getInnerText(comment);
 
     const posts = {
-      postId: i + 1,
       title: getInnerText(titleHeading),
       url: getHref(titleHeading),
       createdAt: replacementDateStr(getInnerText(date)),

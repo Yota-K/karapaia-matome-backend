@@ -27,7 +27,7 @@ export const deletePosts = async () => {
         .delete({
           TableName: tableName,
           Key: {
-            postId: post['postId'],
+            title: post['title'],
             createdAt: post['createdAt'],
           },
         })

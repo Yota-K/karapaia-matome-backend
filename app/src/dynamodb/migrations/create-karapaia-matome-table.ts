@@ -9,9 +9,9 @@ createTable(tableName, {
   BillingMode: 'PAY_PER_REQUEST',
   AttributeDefinitions: [
     {
-      // number
-      AttributeName: 'postId',
-      AttributeType: 'N',
+      // string
+      AttributeName: 'title',
+      AttributeType: 'S',
     },
     {
       // string
@@ -22,7 +22,7 @@ createTable(tableName, {
   KeySchema: [
     {
       // Partition key
-      AttributeName: 'postId',
+      AttributeName: 'title',
       KeyType: 'HASH',
     },
     {
