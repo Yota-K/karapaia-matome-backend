@@ -3,7 +3,7 @@ import { awsConfigUpdate } from '../config';
 
 awsConfigUpdate();
 
-const devOptions = {
+const localOptions = {
   credentials: {
     accessKeyId: 'key',
     secretAccessKey: 'key',
@@ -15,13 +15,13 @@ const devOptions = {
 // JSでDynamoDBを操作するために必要な関数
 // DocumentClientを使用するとJSのデータ型を自動的にDynamoDB上の型に変換してくれるので、
 // コードが簡潔になる
-export const client = new DynamoDB.DocumentClient(devOptions);
+export const client = new DynamoDB.DocumentClient(process.env.isDevelopment ? localOptions : undefined);
 
 export const dbFunc = () => {
   const createTable = async (tableName: string, params: DynamoDB.CreateTableInput) => {
     console.log(`${tableName}: テーブルの作成を行います。`);
 
-    await new DynamoDB(devOptions).createTable(params).promise();
+    await new DynamoDB(localOptions).createTable(params).promise();
 
     console.log(`${tableName}: テーブルの作成に成功しました。`);
   };
@@ -29,7 +29,7 @@ export const dbFunc = () => {
   const deleteTable = async (tableName: string) => {
     console.log(`${tableName}: テーブルの削除を行います。`);
 
-    await new DynamoDB(devOptions)
+    await new DynamoDB(localOptions)
       .deleteTable({
         TableName: tableName,
       })
