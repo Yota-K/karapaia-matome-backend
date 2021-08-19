@@ -61,5 +61,3 @@ export const savePosts = async () => {
     count++;
   }
 };
-
-// savePosts().catch((er) => console.error(er));
