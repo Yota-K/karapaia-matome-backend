@@ -3,6 +3,8 @@ FROM node:15-alpine
 ARG AWS_ACCESS_KEY
 ARG AWS_SECRET_KEY
 
+ENV isDevelopment='isDevelopment'
+
 RUN apk --no-cache update \
   && apk add --update python \
   && apk add make gcc g++ tzdata \
