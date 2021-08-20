@@ -1,7 +1,4 @@
 import { DynamoDB } from 'aws-sdk';
-import { awsConfigUpdate } from '../config';
-
-awsConfigUpdate();
 
 const localOptions = {
   credentials: {
