@@ -38,6 +38,8 @@ export const deletePosts = async () => {
 
 // DBにデータの登録を行う
 export const savePosts = async () => {
+  console.info('データの書き込みをおこないます。');
+
   const results = (await mainFunc()) as Post[][];
 
   await deletePosts();
