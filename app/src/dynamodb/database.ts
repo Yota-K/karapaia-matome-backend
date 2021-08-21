@@ -1,6 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 
 const localOptions = {
+  region: 'ap-northeast-1',
   credentials: {
     accessKeyId: 'key',
     secretAccessKey: 'key',
