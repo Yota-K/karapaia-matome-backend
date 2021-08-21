@@ -4,6 +4,8 @@
   "description": "カラパイアまとめのバックエンド",
   "main": "serverless.ts",
   "scripts": {
+    "deploy:dev": "sls deploy --stage dev",
+    "deploy:prod": "sls deploy --stage prod",
     "local:invoke": "sls offline start",
     "local:savePosts": "npx ts-node src/sample/save-posts.ts",
     "local:deletePosts": "npx ts-node src/sample/delete-posts.ts",
