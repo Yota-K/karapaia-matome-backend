@@ -8,8 +8,10 @@ provider:
   name: aws
   region: ap-northeast-1
   runtime: nodejs14.x
+  # ${opt:stage}・・・sls deploy --stage devのように--stageオプションで設定した値を使用することができる。
+  stage: ${opt:stage, self:custom.defaultStage}
+  memorySize: 512 # 128MBだと途中で処理落ちした
   timeout: 30
-  memorySize: 512
   iam:
     role:
       statements:
@@ -22,11 +24,22 @@ provider:
   logRetentionInDays: 7
   apiGateway:
     shouldStartNameWithService: true
-  # environment:
-  #   # TCP 接続を再利用してより効率的に通信できるようにする
-  #   - AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1' 
+  environment:
+    TZ: Asia/Tokyo
+    # TCP 接続を再利用してより効率的に通信できるようにする
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1' 
   # オプション
   lambdaHashingVersion: 20201221
+
+custom:
+  defaultStage: dev
+  schedule_active:
+    dev: "false"
+    prod: "true"
+    default: "false"
+  serverless-offline:
+    host: 0.0.0.0
+    httpPort: 9000
 
 plugins:
   - serverless-webpack
@@ -42,8 +55,11 @@ functions:
 
   savePosts:
     handler: src/handler.saveKarapaiaPosts
-    # events:
-    #   - schedule: rate(1 day) # 毎日実行
+    events:
+      - schedule:
+          # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
+          rate: cron(0 9 * * ? *) # 日本時間の朝9時に毎日実行
+          enabled: ${self:custom.schedule_active.${opt:stage, self:custom.defaultStage}, self:custom.schedule_active.default}
 
 resources:
   Resources:
@@ -51,7 +67,7 @@ resources:
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: karapaia_matome
+        TableName: 'karapaia_matome_${opt:stage}'
         AttributeDefinitions:
           - AttributeName: title
             AttributeType: S
@@ -64,9 +80,4 @@ resources:
             KeyType: RANGE
         ProvisionedThroughput: # スループット
           ReadCapacityUnits: 1 # 1RCUは1秒間に2回の読み込み、または結果整合性のある1回の読み込み
-          WriteCapacityUnits: 1 # 一秒ごと何回 書き込めるか。
-
-custom:
-  serverless-offline:
-    host: 0.0.0.0
-    httpPort: 9000
+          WriteCapacityUnits: 1 # 1秒ごと何回 書き込めるか。
