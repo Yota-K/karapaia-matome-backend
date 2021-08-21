@@ -58,7 +58,6 @@ export const savePosts = async () => {
         },
       })
       .promise()
-      .then(() => console.log('success!'));
 
     count++;
   }

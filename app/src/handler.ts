@@ -3,18 +3,12 @@ import { config } from 'aws-sdk';
 import { generateResponseHeader } from './lib/generate-res-header';
 import { getPosts, savePosts } from './api';
 
-/* eslint-disable */
-require('dotenv').config();
-/* eslint-disable */
-
 // DBに保存されている記事を全件、日付の降順で取得する
 export const getKarapaiaPosts: Handler = async (_event: APIGatewayEvent, _context: Context, cb: Callback) => {
   // MEMO: API周りの処理をクラス化してインスタンスを生成したときにconfig.updateするようにしたい
   // 警告を回避するためにconfig.updateでregionを指定
   // https://www.fixes.pub/program/578906.html
   config.update({
-    accessKeyId: process.env.ACCESS_KEY,
-    secretAccessKey: process.env.SECRET_KEY,
     region: 'ap-north-east-1',
   });
 
@@ -30,8 +24,6 @@ export const getKarapaiaPosts: Handler = async (_event: APIGatewayEvent, _contex
 // スクレイピング結果をDBに保存するバッチ処理
 export const saveKarapaiaPosts = async () => {
   config.update({
-    accessKeyId: process.env.ACCESS_KEY,
-    secretAccessKey: process.env.SECRET_KEY,
     region: 'ap-north-east-1',
   });
 
