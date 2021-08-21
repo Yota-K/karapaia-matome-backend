@@ -1,16 +1,31 @@
 service: karapaia-matome-api
 
+useDotenv: true
+
+configValidationMode: error
+
 provider:
   name: aws
   region: ap-northeast-1
   runtime: nodejs14.x
   timeout: 30
-  memorySize: 128
+  memorySize: 512
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:*'
+          Resource:
+            - 'arn:aws:dynamodb:ap-northeast-1:*:*'
+  # CloudWatch Logsの有効期限を設定する
+  logRetentionInDays: 7
   apiGateway:
-    minimumCompressionSize: 1024,
     shouldStartNameWithService: true
-  environment:
-    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '2'
+  # environment:
+  #   # TCP 接続を再利用してより効率的に通信できるようにする
+  #   - AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1' 
+  # オプション
   lambdaHashingVersion: 20201221
 
 plugins:
@@ -18,12 +33,38 @@ plugins:
   - serverless-offline
 
 functions:
-  hello:
+  getPosts:
     handler: src/handler.getKarapaiaPosts
     events:
       - http:
           method: GET
           path: posts
+
+  savePosts:
+    handler: src/handler.saveKarapaiaPosts
+    # events:
+    #   - schedule: rate(1 day) # 毎日実行
+
+resources:
+  Resources:
+    # Create DynamoDB
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: karapaia_matome
+        AttributeDefinitions:
+          - AttributeName: title
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+        KeySchema:
+          - AttributeName: title
+            KeyType: HASH
+          - AttributeName: createdAt
+            KeyType: RANGE
+        ProvisionedThroughput: # スループット
+          ReadCapacityUnits: 1 # 1RCUは1秒間に2回の読み込み、または結果整合性のある1回の読み込み
+          WriteCapacityUnits: 1 # 一秒ごと何回 書き込めるか。
 
 custom:
   serverless-offline:
