@@ -48,6 +48,8 @@ plugins:
 functions:
   getPosts:
     handler: src/handler.getKarapaiaPosts
+    environment:
+      TABLE_NAME: ${env:TABLE_NAME}
     events:
       - http:
           method: GET
@@ -55,6 +57,8 @@ functions:
 
   savePosts:
     handler: src/handler.saveKarapaiaPosts
+    environment:
+      TABLE_NAME: ${env:TABLE_NAME}
     events:
       - schedule:
           # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
@@ -67,7 +71,7 @@ resources:
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: 'karapaia_matome_${opt:stage}'
+        TableName: 'karapaia_matome_${opt:stage, self:custom.defaultStage}'
         AttributeDefinitions:
           - AttributeName: title
             AttributeType: S
