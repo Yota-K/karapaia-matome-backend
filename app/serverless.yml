@@ -27,16 +27,16 @@ provider:
   environment:
     TZ: Asia/Tokyo
     # TCP 接続を再利用してより効率的に通信できるようにする
-    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1' 
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
   # オプション
   lambdaHashingVersion: 20201221
 
 custom:
   defaultStage: dev
   schedule_active:
-    dev: "false"
-    prod: "true"
-    default: "false"
+    dev: 'false'
+    prod: 'true'
+    default: 'false'
   serverless-offline:
     host: 0.0.0.0
     httpPort: 9000
@@ -61,8 +61,9 @@ functions:
       TABLE_NAME: ${env:TABLE_NAME}
     events:
       - schedule:
+          # 日本時間の朝9:00に毎日実行、UTCでしか指定できない？
           # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
-          rate: cron(0 9 * * ? *) # 日本時間の朝9時に毎日実行
+          rate: cron(0 0 * * ? *)
           enabled: ${self:custom.schedule_active.${opt:stage, self:custom.defaultStage}, self:custom.schedule_active.default}
 
 resources:
