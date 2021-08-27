@@ -1,5 +1,6 @@
 import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
 import { generateResponseHeader } from './lib/generate-res-header';
+import { deployToVercel } from './lib/vercel';
 import { KarapaiaApi } from './api';
 
 // DBに保存されている記事を全件、日付の降順で取得する
@@ -21,7 +22,9 @@ export const saveKarapaiaPosts = async () => {
 
   try {
     await api.savePosts();
-    console.info('スクレイピング結果をDBに保存しました');
+    console.info('スクレイピング結果をDBに保存しました。');
+
+    await deployToVercel();
   } catch (er) {
     console.error(er);
   }

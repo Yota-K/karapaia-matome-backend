@@ -11,7 +11,7 @@ provider:
   # ${opt:stage}・・・sls deploy --stage devのように--stageオプションで設定した値を使用することができる。
   stage: ${opt:stage, self:custom.defaultStage}
   memorySize: 512 # 128MBだと途中で処理落ちした
-  timeout: 30
+  timeout: 90
   iam:
     role:
       statements:
@@ -50,6 +50,7 @@ functions:
     handler: src/handler.getKarapaiaPosts
     environment:
       TABLE_NAME: ${env:TABLE_NAME}
+      VERCEL_DEPLOYMENT_URL: ${env:VERCEL_DEPLOYMENT_URL}
     events:
       - http:
           method: GET
@@ -59,6 +60,7 @@ functions:
     handler: src/handler.saveKarapaiaPosts
     environment:
       TABLE_NAME: ${env:TABLE_NAME}
+      VERCEL_DEPLOYMENT_URL: ${env:VERCEL_DEPLOYMENT_URL}
     events:
       - schedule:
           # 日本時間の朝9:00に毎日実行、UTCでしか指定できない？
