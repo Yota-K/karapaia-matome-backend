@@ -1,4 +1,5 @@
 export type Post = {
+  uuid: string;
   title: string;
   url: string;
   createdAt: string;

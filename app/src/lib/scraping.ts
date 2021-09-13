@@ -54,6 +54,7 @@ const scrapingFunc = (nodes: NodeListOf<Element>) => {
     const commentCount = getInnerText(comment);
 
     const posts = {
+      uuid: generateUuid(getHref(titleHeading)),
       title: getInnerText(titleHeading),
       url: getHref(titleHeading),
       createdAt: replacementDateStr(getInnerText(date)),
@@ -100,4 +101,17 @@ const getInnerText = (el: Element) => {
 // タグ内部のリンクを取得
 const getHref = (el: Element) => {
   return el.getAttribute('href') as string;
+};
+
+// uuidの生成
+const generateUuid = (url: string) => {
+  const found = url.match(/\d+/g);
+
+  // URLに含まれる数字が見つけられなかったら、生成した乱数をuuidとして割り当てる
+  if (!found) {
+    const randomNum = Math.floor(Math.random() * 999999) + 1000;
+    return randomNum.toString();
+  }
+
+  return found[0];
 };
