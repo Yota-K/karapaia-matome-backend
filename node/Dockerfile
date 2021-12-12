@@ -1,4 +1,4 @@
-FROM node:15-alpine
+FROM node:16-alpine
 
 ARG AWS_ACCESS_KEY
 ARG AWS_SECRET_KEY
@@ -6,9 +6,8 @@ ARG AWS_SECRET_KEY
 ENV isDevelopment='isDevelopment'
 
 RUN apk --no-cache update \
-  && apk add --update python \
+  && apk add --update python3 \
   && apk add make gcc g++ tzdata \
-  && apk add nodejs \
   && npm install -g serverless
 
 # AWSの認証情報を~/.aws/credentialsに書き込む
